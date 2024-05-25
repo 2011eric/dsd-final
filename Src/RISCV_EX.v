@@ -10,13 +10,13 @@ module EX_STAGE #(
     input [BIT_W-1: 0] rs1_dat_in,
     input [BIT_W-1: 0] rs2_dat_in,
     input [BIT_W-1: 0] imm,
-    input [4: 0] rd_in,
         //various control signals input
     input alusrc_in,
     input [3: 0] aluctrl_in,
     input jal_in,
 
     //transparent for this stage
+    input [4: 0] rd_in,
     input memrd_in,
     input memwr_in,
     input mem2reg_in,
@@ -27,6 +27,7 @@ module EX_STAGE #(
     output [BIT_W-1: 0] alu_result,
     output [BIT_W-1: 0] second_opr,
     output [4: 0] rd_out,
+    output [BIT_W-1: 0] nx_PC,
         //various control signals output
     output memrd_out,
     output memwr_out,
@@ -42,7 +43,8 @@ module EX_STAGE #(
     reg memrd_out_r, memwr_out_r, mem2reg_out_r, regwr_out_r;
     reg [BIT_W-1: 0] alu_opA, alu_opB;
     //Continuous assignments
-
+    assign nx_PC = PC_in + 4;
+    
     //module instantiation
     ALU #(.BIT_W(BIT_W)) alu_inst(
         .aluctrl(aluctrl_in),
