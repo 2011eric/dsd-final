@@ -1,3 +1,5 @@
+//under development by Gao HengSiang
+
 module EX_STAGE #(
     parameter BIT_W = 32
     )(
