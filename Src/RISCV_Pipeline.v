@@ -97,6 +97,12 @@ module RISCV_Pipeline(
         .pc_branch(ID_pc_branch)
     );
 
-
+    always @(*) begin
+        if (mem2reg_in) begin
+            wrdata = mem_dat;
+        end else begin
+            wrdata = alu_result_in;
+        end
+    end
 
 endmodule
