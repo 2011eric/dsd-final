@@ -14,17 +14,18 @@ module RISCV_ID(
     output [31:0] pc_ppl_out,
     output        jal_ppl,
     output        jalr_ppl,
+    output        branch_ppl,
+    output        bne_ppl,
     output        mem_ren_ppl,
     output        mem_wen_ppl,
     output        mem_to_reg_ppl,
+    output  [4:0] rs1_ppl,
+    output  [4:0] rs2_ppl,
     output        reg_wen_ppl,
 
 //----------register_file interface-------------
     output  [4:0] regfile_rs1, regfile_rs2,
-    input  [31:0] regfile_rs1_data, regfile_rs2_data,
-//----------PC generation-------------------------
-    output        branch_taken,
-    output [31:0] pc_branch
+    input  [31:0] regfile_rs1_data, regfile_rs2_data
 );
     // decoder result
     wire  [4:0] rs1, rs2, rd;
@@ -36,19 +37,21 @@ module RISCV_ID(
     // wire and reg
     wire [31:0] rs1_rdata_w, rs2_rdata_w;
     wire [31:0] imm_w;
-    wire  [4:0] rd_w;
+    wire  [4:0] rd_w, rs1_w, rs2_w;
     wire        alu_src_w;
     wire  [3:0] alu_op_w;
     wire        jal_w, jalr_w, mem_to_reg_w, mem_wen_w, mem_ren_w, reg_wen_w;
     wire [31:0] pc_out_w;
+    wire        bne_w;
 
     reg  [31:0] rs1_rdata_r, rs2_rdata_r;
     reg  [31:0] imm_r;
-    reg   [4:0] rd_r;
+    reg   [4:0] rd_r, rs1_r, rs2_r;
     reg         alu_src_r;
     reg   [3:0] alu_op_r;
     reg         jal_r, jalr_r, mem_to_reg_r, mem_wen_r, mem_ren_r, reg_wen_r;
     reg  [31:0] pc_out_r;
+    reg        bne_r;
 
     assign regfile_rs1 = rs1;
     assign regfile_rs2 = rs2;
@@ -56,20 +59,20 @@ module RISCV_ID(
     assign rs2_rdata_w = regfile_rs2_data;
     assign imm_w = imm;
     assign rd_w = rd;
+    assign rs1_w = rs1;
+    assign rs2_w = rs2;
     assign alu_src_w = alu_src;
     assign alu_op_w = alu_op;
     assign jal_w = jal;
     assign jalr_w = jalr;
+    assign branch_ppl = branch;
     assign mem_to_reg_w = mem_to_reg;
     assign mem_wen_w = mem_wen;
     assign mem_ren_w = mem_ren;
     assign reg_wen_w = reg_wen;
     assign pc_out_w = pc_ppl;
+    assign bne_w = bne;
 
-
-
-    assign branch_taken = ((regfile_rs1_data == regfile_rs2_data) ^ bne) & branch; 
-    assign pc_branch = pc_ppl + imm;
 
     // pipeline reg output
     assign rd_ppl = rd_r;
@@ -85,6 +88,9 @@ module RISCV_ID(
     assign mem_wen_ppl = mem_wen_r;
     assign mem_to_reg_ppl = mem_to_reg_r;
     assign reg_wen_ppl = reg_wen_r;
+    assign rs1_ppl = rs1_r;
+    assign rs2_ppl = rs2_r;
+    assign bne_ppl = bne_r;
 
     decoder u0 (
         .inst_i(inst_ppl),
@@ -105,9 +111,11 @@ module RISCV_ID(
     );
 
 
-    always @(posedge clk or negedge rst_n) begin
+    always @(posedge clk) begin
         if (!rst_n) begin
             rd_r  <= 0;
+            rs1_r <= 0;
+            rs2_r <= 0;
             alu_src_r <= 0;
             alu_op_r <= 0;
             jal_r <= 0;
@@ -120,12 +128,15 @@ module RISCV_ID(
             rs2_rdata_r <= 0;
             imm_r <= 0;
             pc_out_r <= 0;
+            bne_r <= 0;
         end else if (!stall) begin
             rs1_rdata_r <= rs1_rdata_w;
             rs2_rdata_r <= rs2_rdata_w;
             imm_r <= imm_w; // don't need to flush imm and reg data
             pc_out_r <= pc_out_w;
             if (flush) begin
+                rs1_r <= 0;
+                rs2_r <= 0;
                 rd_r  <= 0;
                 alu_src_r <= 0;
                 alu_op_r <= 0;
@@ -135,7 +146,10 @@ module RISCV_ID(
                 mem_wen_r <= 0;
                 mem_ren_r <= 0;
                 reg_wen_r <= 0;
+                bne_r <= 0;
             end else begin
+                rs1_r <= rs1_w;
+                rs2_r <= rs2_w;
                 rd_r  <= rd_w;
                 alu_src_r <= alu_src_w;
                 alu_op_r <= alu_op_w;
@@ -145,6 +159,7 @@ module RISCV_ID(
                 mem_wen_r <= mem_wen_w;
                 mem_ren_r <= mem_ren_w;
                 reg_wen_r <= reg_wen_w;
+                bne_r <= bne_w;
             end
         end
     end
