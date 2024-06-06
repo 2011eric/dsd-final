@@ -38,10 +38,11 @@ module RISCV_IF (
     wire        inst_ready;
     wire        inst_compressed;
 
-
+    localparam OPCODE_BRANCH = 7'b11_000_11;
     localparam NOP = 32'h00000013;
     assign pc_step = pc_r + (inst_compressed ? 2 : 4);
-
+    assign sbtype_imm = {{(32-13){inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+    assign is_branch = inst_i[6: 0] == OPCODE_BRANCH;
 
     realigner u0 (
         .clk(clk),
