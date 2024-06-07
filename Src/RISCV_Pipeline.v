@@ -73,6 +73,7 @@ module RISCV_Pipeline (
     wire EX_jump_noblock, 
          EX_prediction_incorrect,
          EX_feedback_valid;
+    wire make_branch_correction;
     wire [31: 0] EX_PC_result_noblock;
 
 
@@ -84,12 +85,15 @@ module RISCV_Pipeline (
     reg  regfile_wen;
     reg mem_wb_valid_r, mem_wb_valid_w;
     //wire assignment 
+    assign make_branch_correction = EX_prediction_incorrect && EX_feedback_valid;
+
     //FIXME: hazard detection
-    assign IF_pc_src = {EX_prediction_incorrect, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
+    
+    assign IF_pc_src = {make_branch_correction, EX_jump_noblock}; // pc_src[1] = branch pc_src[0] = jalr || jal
     assign IF_stall = (DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg))||load_use_hazard;
-    assign IF_flush = EX_prediction_incorrect || EX_jump_noblock;
+    assign IF_flush = make_branch_correction || EX_jump_noblock;
     assign ID_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
-    assign ID_flush = EX_prediction_incorrect || EX_jump_noblock || load_use_hazard; // TODO: plus load-use hazard
+    assign ID_flush = make_branch_correction || EX_jump_noblock || load_use_hazard; // TODO: plus load-use hazard
     assign EX_stall = DCACHE_stall && (EX_MEM_memwr || EX_MEM_mem2reg);
 
 
