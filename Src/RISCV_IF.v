@@ -44,6 +44,7 @@ module RISCV_IF(
     wire [31:0] pc_step;
     wire        take_branch;
     wire [31:0] branch_destination;
+    wire [31:0] sbtype_imm;
 
     wire       inst_ready;
     wire       inst_compressed;
