@@ -4,6 +4,7 @@ module saturation_counter(
     input clk,
     input rst_n,
     input prediction_correct,
+    input feedback_valid,
     output take_branch
 );
     reg [1: 0] satcnt_r, satcnt_w;
@@ -21,6 +22,7 @@ module saturation_counter(
         2'b10: satcnt_w = (prediction_correct)? 2'b11: 2'b01;
         2'b11: satcnt_w = (prediction_correct)? 2'b11: 2'b10;
         endcase
+        if(!feedback_valid) satcnt_w = satcnt_r;
     end
 
     always @(posedge clk) begin
