@@ -151,8 +151,8 @@ module RISCV_Pipeline (
         .stall(IF_stall),
         .flush(IF_flush),
         .pc_src(IF_pc_src), //feedback from EX stage
-        .pc_branch(EX_PC_result_noblock),//feedback from EX stage
-        .pc_j(EX_PC_correction), // Feedback from EX stage
+        .pc_branch(EX_PC_correction),//feedback from EX stage
+        .pc_j(EX_PC_result_noblock), // Feedback from EX stage
         .prediction_correct(!EX_prediction_incorrect),//tells the saturation counter if its prediction is correct
         .feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
         .load_use_hazard(load_use_hazard),
