@@ -74,7 +74,7 @@ module RISCV_Pipeline (
          EX_prediction_incorrect,
          EX_feedback_valid;
     wire make_branch_correction;
-    wire [31: 0] EX_PC_result_noblock;
+    wire [31: 0] EX_PC_result_noblock, EX_PC_correction;
 
 
     // forwarding & hazard detection
@@ -152,7 +152,7 @@ module RISCV_Pipeline (
         .flush(IF_flush),
         .pc_src(IF_pc_src), //feedback from EX stage
         .pc_branch(EX_PC_result_noblock),//feedback from EX stage
-        .pc_j(EX_PC_result_noblock), // Feedback from EX stage
+        .pc_j(EX_PC_correction), // Feedback from EX stage
         .prediction_correct(!EX_prediction_incorrect),//tells the saturation counter if its prediction is correct
         .feedback_valid(EX_feedback_valid),//if the instruction in EX is not a branch or stalling...
         .load_use_hazard(load_use_hazard),
@@ -257,6 +257,7 @@ module RISCV_Pipeline (
         //direct output, no register blocking
         .jump_noblock(EX_jump_noblock),  //should correct PC immediately
         .PC_result_noblock(EX_PC_result_noblock),
+        .PC_correction(EX_PC_correction),
         .prediction_incorrect(EX_prediction_incorrect),
         .feedback_valid(EX_feedback_valid)
     );

@@ -51,7 +51,8 @@ module EX_STAGE #(
     //INPUT FROM STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
     //maybe no need because forwarding is already done in ID stage
     output jump_noblock, //not blocked by register, signal for IF stage
-    output [31: 0] PC_result_noblock,//for jump and branch
+    output [31: 0] PC_result_noblock,//for jump only
+    output [31: 0] PC_correction,
     output prediction_incorrect, //not blocked
     output feedback_valid//prediction_evaluation should only be taken into account when it is a branch
 );
@@ -89,6 +90,7 @@ module EX_STAGE #(
     //direct output, no blocking!
     assign jump_noblock = jalr_in || jal_in;
     assign PC_result_noblock = alu_o_wire;
+    assign PC_correction = (prediction_incorrect ^ branch_taken_in)? alu_o_wire: PC_step_w;
         //branch
     assign prediction_incorrect = ((forwarded_rs1 == forwarded_rs2) ^ bne_in) ^ branch_taken_in; 
     assign feedback_valid = !stall && branch_in;
