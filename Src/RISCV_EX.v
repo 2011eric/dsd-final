@@ -18,7 +18,8 @@ module EX_STAGE #(
     input branch_in,
     input bne_in,
     input stall,
-    input branch_taken_in,
+//    input branch_taken_in,
+    input [31: 0] pred_dest_i,
     input mul_ppl_i,
 
     //transparent for this stage
@@ -53,7 +54,8 @@ module EX_STAGE #(
     //INPUT FROM STANDALONE MODULES SUCH AS FORWARDING, HAZARD_DETECTION
     //maybe no need because forwarding is already done in ID stage
     output jump_noblock,  //not blocked by register, signal for IF stage
-    output [31:0] PC_result_noblock,  //for jump only
+    //output [31:0] PC_result_noblock,  //for jump only, deprecated
+    output set_taken_o,
     output [31:0] PC_correction,
     output make_correction,  //not blocked
     output feedback_valid//prediction_evaluation should only be taken into account when it is a branch
@@ -85,7 +87,8 @@ module EX_STAGE #(
     wire jump_in;  // indicate current instruction is j-type
     wire perform_correction;  // a unified signal for both j-type and b-type inst.
     wire branch_actual_taken;
-    wire prediction_incorrect;
+    //wire prediction_incorrect;
+    wire dest_mismatch;
     //Continuous assignments
     //output assignments
     assign alu_result = alu_result_r;
@@ -107,8 +110,9 @@ module EX_STAGE #(
     //branch
     assign feedback_valid = (branch_in || jump_in);
     assign branch_actual_taken = ((forwarded_rs1 == forwarded_rs2) ^ bne_in);
-    assign prediction_incorrect = branch_actual_taken ^ branch_taken_in;
-    assign perform_correction = jump_in || prediction_incorrect;
+    //assign prediction_incorrect = branch_actual_taken ^ branch_taken_in;
+    assign dest_mismatch = pred_dest_i != PC_correction;
+    assign perform_correction = dest_mismatch;
 
     //direct output, no blocking!
     assign jump_noblock = jump_in;
