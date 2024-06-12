@@ -77,7 +77,7 @@ module RISCV_IF(
     assign rvc_jalr_jr = (inst_i[15:13] == 3'b100)
                         & (inst_i[6:2] == 5'b00000)
                         & (inst_i[1:0] == 2'b10);    
-    assign rvc_jal_j = (inst_i[15:13] == 3'b101 | inst_i[15:13] == 3'b001) && inst_i[1:0] == 2'b01;
+    assign rvc_jal_j = (inst_i[15:13] == 3'b101 || inst_i[15:13] == 3'b001) && inst_i[1:0] == 2'b01;
     
     assign is_branch = inst_compressed? 
                         ((inst_i[15:13] == 3'b110 | (inst_i[15:13] == 3'b111))

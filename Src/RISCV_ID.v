@@ -162,6 +162,7 @@ module RISCV_ID (
             rs2_rdata_r <= 0;
             imm_r <= 0;
             pc_out_r <= 0;
+            compressed_ppl_r <= 0;
             bne_r <= 0;
             branch_r <= 0;
             //branch_taken_r <= 0;
