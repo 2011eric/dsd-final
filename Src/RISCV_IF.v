@@ -21,12 +21,14 @@ module RISCV_IF(
     output [31: 0] inst_ppl,
     output [31: 0] pc_ppl,
     output         compressed_ppl,
-    output         branch_taken_ppl,//idicates if the branch was predicted to be taken
+    //output         branch_taken_ppl,//idicates if the branch was predicted to be taken
+    //will compare the predicted pc and the correct pc in EX stage, so no need 
+    output [31: 0] pred_dest_ppl,
 //--------IF stage PC------------
     output [31:0] PC
 );
 
-    //-------Pipeline Registers-------
+    //-------Pipeline Registers------
     reg  [31:0] pc_ppl_r;
     wire [31:0] pc_ppl_w;
     reg  [31:0] inst_ppl_r;
@@ -34,8 +36,13 @@ module RISCV_IF(
     reg         compressed_ppl_r;
     wire        compressed_ppl_w;
     
+    /*deprecated because BTB
     reg         branch_taken_ppl_r;
     wire        branch_taken_ppl_w;
+    */
+    reg [31: 0] pred_dest_ppl_r;
+    wire [31: 0] pred_dest_ppl_w;
+
     //-------Internal Registers-------
     wire [31:0] inst_aligned;
     // wire [31:0] inst_decompressed;
@@ -48,6 +55,7 @@ module RISCV_IF(
     wire        is_branch;
     wire       inst_ready;
     wire       inst_compressed;
+    wire [31: 0] pred_dest;
     
 
     localparam OPCODE_BRANCH = 7'b11_000_11;
@@ -83,12 +91,19 @@ module RISCV_IF(
 
     assign inst_i = inst_aligned;
     branch_predictor u_branch_predictor(
-        .clk(clk),
-        .rst_n(rst_n),
-        .prediction_correct(!make_correction),
-        .feedback_valid(feedback_valid),//if the instruction in EX is not a branch, or if it is stalling, 
-        //the saturation counter should not take this feedback
-        .take_branch(take_branch)
+        //input
+        .clk                    (clk),
+        .rst_n                  (rst_n),
+        .branch                 (pc_r),
+        //output 
+        .take_branch            (take_branch),
+        .predicted_destination (pred_dest),       
+        
+        //feedback inputs
+        .feedback_valid         (feedback_valid),
+        .set_pc                 (),
+        .set_taken              (),
+        .set_destination        ()
     );
 
     always @(*) begin : next_pc
@@ -106,14 +121,16 @@ module RISCV_IF(
     assign inst_ppl_w = stall ? inst_ppl_r : (flush || !inst_ready) ? NOP : inst_i;
     assign pc_ppl_w = stall ? pc_ppl_r : pc_r;
     assign compressed_ppl_w = stall ? compressed_ppl_r : (flush || !inst_ready) ? 0 : inst_compressed;
-    assign branch_taken_ppl_w = take_branch;
+    //assign branch_taken_ppl_w = take_branch;
+    assign pred_dest_ppl_w = stall? pred_dest_ppl_r : pred_dest;
 
     // output assignment
     assign inst_ppl = inst_ppl_r;
     assign pc_ppl = pc_ppl_r;
     assign compressed_ppl = compressed_ppl_r;
     assign PC = pc_r;
-    assign branch_taken_ppl = branch_taken_ppl_r;
+    //assign branch_taken_ppl = branch_taken_ppl_r;
+    assign pred_dest_ppl = pred_dest_ppl_r;
 
     always @(posedge clk) begin
         if (!rst_n) begin
@@ -121,13 +138,15 @@ module RISCV_IF(
             pc_ppl_r <= 0;
             inst_ppl_r <= 0;
             compressed_ppl_r <= 0;
-            branch_taken_ppl_r <= 0;
+            //branch_taken_ppl_r <= 0;
+            pred_dest_ppl_r <= 0;
         end else begin
             pc_r <= pc_w;
             inst_ppl_r <= inst_ppl_w;
             pc_ppl_r <= pc_ppl_w;
             compressed_ppl_r <= compressed_ppl_w;
-            branch_taken_ppl_r <= branch_taken_ppl_w;
+            //branch_taken_ppl_r <= branch_taken_ppl_w;
+            pred_dest_ppl_r <= pred_dest_ppl_w;
         end
     end
 
