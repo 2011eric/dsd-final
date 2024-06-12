@@ -117,7 +117,7 @@ module RISCV_ID (
     assign compressed_ppl_out = compressed_ppl_r;
     assign mul_ppl = mul_r;
     //assign branch_taken_ppl = branch_taken_r;
-    assign pre_dest_ppl = pred_dest_r;
+    assign pred_dest_ppl = pred_dest_r;
 
     decompressor u_decompressor (
         .inst_i    (inst_ppl[15:0]),
