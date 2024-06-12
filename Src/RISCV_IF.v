@@ -54,22 +54,26 @@ module RISCV_IF(
     reg [31:0]  pc_r, pc_w;
     wire [31:0] pc_step;
     wire        take_branch;
-    wire [31:0] branch_destination;
+    //wire [31:0] branch_destination;//deprecated
     wire [31:0] sbtype_imm;
     wire        is_branch;
     wire        rvc_jalr_jr, rvc_jal_j;
     wire        is_jump;
     wire       inst_ready;
     wire       inst_compressed;
-    wire [31: 0] pred_dest;
+    wire [31: 0] btb_dest; //btb_dest is different from pred_dest
+    //for example: if the prediction is to not take --> pred_dest = pc_step
+    //btb_dest is simply what btb stores in anticipation of a branch/jump
     
 
     localparam OPCODE_BRANCH = 7'b11_000_11;
-    parameter OPCODE_JAL    = 7'b11_011_11;
+    localparam OPCODE_JAL    = 7'b11_011_11;
+    localparam OPCODE_JALR   = 7'b11_001_11;
+
     localparam NOP = 32'h00000013;
     assign pc_step = pc_r + (inst_compressed ? 2 : 4);
-    assign sbtype_imm = inst_compressed ? {{24{inst_i[12]}}, inst_i[6:5], inst_i[2], inst_i[11:10], inst_i[4:3], 1'b0} :
-    {{(32-13){inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
+    //assign sbtype_imm = inst_compressed ? {{24{inst_i[12]}}, inst_i[6:5], inst_i[2], inst_i[11:10], inst_i[4:3], 1'b0} :
+    //{{(32-13){inst_i[31]}}, inst_i[31], inst_i[7], inst_i[30:25], inst_i[11:8], 1'b0};
     assign rvc_jalr_jr = (inst_i[15:13] == 3'b100)
                         & (inst_i[6:2] == 5'b00000)
                         & (inst_i[1:0] == 2'b10);    
@@ -81,7 +85,7 @@ module RISCV_IF(
                         (inst_i[6: 0] == OPCODE_BRANCH);
     assign is_jump   = inst_compressed? 
                         (rvc_jalr_jr || rvc_jal_j) :
-                        (inst_i[6: 0] == OPCODE_BRANCH);
+                        (inst_i[6: 0] == OPCODE_JAL || inst_i[6: 0] == OPCODE_JALR);
 
 
 
@@ -115,7 +119,7 @@ module RISCV_IF(
         .branch_pc              (pc_r),
         //output 
         .take_branch            (take_branch),
-        .predicted_destination  (pred_dest),       
+        .predicted_destination  (btb_dest),       
         
         //feedback inputs
         .feedback_valid         (feedback_valid && !ID_stall),//prevent update when ID_stall (ID/EX reg)
@@ -130,7 +134,7 @@ module RISCV_IF(
             pc_w = pc_correction;
         end else if (!(load_mul_use_hazard || stall || !inst_ready)) begin
             //branch if predicted so, always jump
-            pc_w = ((take_branch && is_branch)||is_jump)? pred_dest: pc_step; 
+            pc_w = ((take_branch && is_branch)||is_jump)? btb_dest: pc_step; 
         end else begin
             pc_w = pc_r;
         end
@@ -141,7 +145,7 @@ module RISCV_IF(
     assign pc_ppl_w = stall ? pc_ppl_r : pc_r;
     assign compressed_ppl_w = stall ? compressed_ppl_r : (flush || !inst_ready) ? 0 : inst_compressed;
     //assign branch_taken_ppl_w = take_branch;
-    assign pred_dest_ppl_w = stall? pred_dest_ppl_r : pred_dest;
+    assign pred_dest_ppl_w = stall? pred_dest_ppl_r : pc_w;
 
     // output assignment
     assign inst_ppl = inst_ppl_r;
