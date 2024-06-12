@@ -6,9 +6,12 @@ module RISCV_IF(
     input         flush,
     //input  [1:0]  pc_src,  // pc_src[1] = branch pc_src[0] = jalr || jal TODO: compress it to 1 bit
     input         make_correction,
-    // input  [31:0] pc_branch,
     input  [31:0] pc_correction,
+    //for BTB
     input         feedback_valid,//if the instruction in EX is not a branch or stalling...
+    input [31: 0] set_pc_i,
+    input         set_taken_i,
+    input [31: 0] set_target_i,
 //-------ICACHE-interface-------
 	input  ICACHE_stall,
     input  load_mul_use_hazard,
@@ -67,7 +70,7 @@ module RISCV_IF(
                         ((inst_i[15:13] == 3'b110 | (inst_i[15:13] == 3'b111))
                         & (inst_i[1:0] == 2'b01)) :
                         (inst_i[6: 0] == OPCODE_BRANCH);
-    assign branch_destination = pc_r + sbtype_imm;
+    //assign branch_destination = pc_r + sbtype_imm; //doing this in IF is too slow, do in EX
 
     realigner u0 (
         .clk(clk),
@@ -97,13 +100,13 @@ module RISCV_IF(
         .branch                 (pc_r),
         //output 
         .take_branch            (take_branch),
-        .predicted_destination (pred_dest),       
+        .predicted_destination  (pred_dest),       
         
         //feedback inputs
         .feedback_valid         (feedback_valid),
-        .set_pc                 (),
-        .set_taken              (),
-        .set_destination        ()
+        .set_pc                 (set_pc_i),
+        .set_taken              (set_taken_i),
+        .set_destination        (set_target_i)
     );
 
     always @(*) begin : next_pc
@@ -111,7 +114,7 @@ module RISCV_IF(
         if (make_correction) begin
             pc_w = pc_correction;
         end else if (!(load_mul_use_hazard || stall || !inst_ready)) begin
-            pc_w = (take_branch && is_branch)? branch_destination: pc_step; //branch if predicted so
+            pc_w = (take_branch && is_branch)? pred_dest: pc_step; //branch if predicted so
         end else begin
             pc_w = pc_r;
         end
