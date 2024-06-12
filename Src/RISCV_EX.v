@@ -55,9 +55,12 @@ module EX_STAGE #(
     //maybe no need because forwarding is already done in ID stage
     output jump_noblock,  //not blocked by register, signal for IF stage
     //output [31:0] PC_result_noblock,  //for jump only, deprecated
+    //feedback for IF stage PC correction
+    output make_correction,
+    output [31: 0] PC_correction,
+    //feedback for BTB
     output set_taken_o,
-    output [31:0] PC_correction,
-    output make_correction,  //not blocked
+    output [31: 0] set_target_o,//feed into BTB, whether it predicted correctly or not
     output feedback_valid//prediction_evaluation should only be taken into account when it is a branch
 );
     //Reg and Wire declaration
@@ -119,6 +122,8 @@ module EX_STAGE #(
     // assign PC_result_noblock = alu_o_wire; // this shouldn't be used
     assign PC_correction = (branch_actual_taken || jump_in) ? alu_o_wire : PC_step_w;
     assign make_correction = perform_correction;
+    assign set_taken_o = branch_actual_taken;
+    assign set_target_o = alu_o_wire;
 
     //module instantiation
     alu alu_inst (
