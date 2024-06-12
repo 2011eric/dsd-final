@@ -27,26 +27,15 @@ module icache_wrapper (
 `endif
 );
 `define I_USE_DM
-    reg cache_mem_ready;
-    wire cache_mem_read;
-    // wire cache_mem_write;
-
-    wire [27:0] cache_mem_addr;
-    reg [127:0] cache_mem_rdata;
-    // wire [127:0] cache_mem_wdata;
-
-    reg mem_ready_r, mem_ready_w;
-    reg mem_read_r, mem_read_w;
-    // reg mem_write_r, mem_write_w;
-    reg [27:0] mem_addr_r, mem_addr_w;
-    // reg [127:0] mem_wdata_r, mem_wdata_w;
-    reg [127:0] mem_rdata_r, mem_rdata_w;
+    
 
 
-    assign mem_read = mem_read_r;
-    // assign mem_write = mem_write_r;
-    assign mem_addr = mem_addr_r;
-    // assign mem_wdata = mem_wdata_r;
+
+        wire cache_mem_read;
+        wire [27:0] cache_mem_addr;
+        wire [127:0] cache_mem_rdata;
+        wire cache_mem_ready;
+
 `ifdef I_USE_DM
     icache_dm u_cache (
 `else
@@ -67,6 +56,21 @@ module icache_wrapper (
         .mem_rdata (cache_mem_rdata),
         .mem_ready (cache_mem_ready)
     );
+
+    prefetch_controller u_prefetch_controller (
+    // cache interface
+        .clk                (clk),
+        .rst                (proc_reset),
+        .cache_mem_read     (cache_mem_read),
+        .cache_mem_addr     (cache_mem_addr),
+        .cache_mem_rdata    (cache_mem_rdata),
+        .cache_mem_ready    (cache_mem_ready),
+        // memory interface
+        .mem_ready          (mem_ready),
+        .mem_rdata          (mem_rdata),
+        .mem_read           (mem_read),
+        .mem_addr           (mem_addr)
+    );
 `ifdef DEBUG_STAT
     cache_pmu u_cache_pmu (
         .clk                 (clk),
@@ -84,37 +88,6 @@ module icache_wrapper (
     );
 `endif
 
-    always @(*) begin: memory_signal
-        //input from memory
-        mem_ready_w = mem_ready;
-        mem_rdata_w = mem_ready? mem_rdata : mem_rdata_r;
-        // // output to memory
-        mem_read_w = mem_ready? 0: cache_mem_read;
-        // mem_write_w = cache_mem_write;
-        mem_addr_w = cache_mem_addr;
-        // mem_wdata_w = cache_mem_wdata;
-
-    end
-
-    always @(*) begin: mem2cache
-        cache_mem_ready = mem_ready_r;
-        cache_mem_rdata = mem_rdata_r;
-    end
 
 
-    always @(posedge clk) begin
-        if (proc_reset) begin
-            mem_ready_r <= 1'b0;
-            mem_read_r <= 1'b0;
-            // mem_write_r <= 1'b0;
-            mem_addr_r <= 28'b0;
-            // mem_wdata_r <= 128'b0;
-            mem_rdata_r <= 128'b0;
-        end else begin
-            mem_ready_r <= mem_ready_w;
-            mem_read_r <= mem_read_w;
-            mem_addr_r <= mem_addr_w;
-            mem_rdata_r <= mem_rdata_w;
-        end
-    end
 endmodule

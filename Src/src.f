@@ -6,6 +6,7 @@ alu.v
 dum_mul.v
 decoder.v 
 decompressor.v
+prefetch_controller.v
 dcache_wrapper.v
 icache_wrapper.v
 cache_pmu.v
