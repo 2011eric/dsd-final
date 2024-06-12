@@ -112,7 +112,7 @@ module RISCV_IF(
         //input
         .clk                    (clk),
         .rst_n                  (rst_n),
-        .branch                 (pc_r),
+        .branch_pc              (pc_r),
         //output 
         .take_branch            (take_branch),
         .predicted_destination  (pred_dest),       

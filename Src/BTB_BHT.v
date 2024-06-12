@@ -28,6 +28,9 @@ module BTB_BHT#(
    
    // Saturating counters
    reg [1:0] counter_r [(1<<BTBW)-1:0], counter_w [(1<<BTBW)-1:0];
+
+   // BTB vectors
+   reg [PCW-1:0] btb_r [(1<<BTBW)-1:0], btb_w [(1<<BTBW)-1:0];
     
    // PC Address hash mapping
    assign tb_entry = pc_i[BTBW-1:0];
@@ -65,8 +68,7 @@ module BTB_BHT#(
    end
 
 
-    // BTB vectors
-   reg [PCW-1:0] btb_r [(1<<BTBW)-1:0], btb_w [(1<<BTBW)-1:0];
+
     
    always @(*) begin: BTB_comb
       //default

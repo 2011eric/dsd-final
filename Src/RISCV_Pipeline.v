@@ -255,7 +255,7 @@ module RISCV_Pipeline (
         .branch_in(ID_EX_branch_ppl),
         .bne_in(ID_EX_bne_ppl),
         .stall(EX_stall),
-        .pred_dest_in(ID_EX_pred_dest_ppl),
+        .pred_dest_i(ID_EX_pred_dest_ppl),
         .mul_ppl_i(ID_EX_mul_ppl),
         //transparent for this stage
         .rd_in(ID_EX_rd_ppl),

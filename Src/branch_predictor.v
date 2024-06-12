@@ -25,7 +25,7 @@ module branch_predictor(
     assign predicted_destination = 0;
 `else
     parameter BTB_SIZE = 4;
-    BTB_BHT(.BTBW(BTB_SIZE)) u_btb_bht(
+    BTB_BHT #(.BTBW(BTB_SIZE)) u_btb_bht (
         .clk                    (clk),
         .rst_n                  (rst_n),
         .pre_take_o             (take_branch),
