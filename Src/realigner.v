@@ -30,7 +30,6 @@ module realigner (
     reg [29:0] pc_word_addr;
     reg [31:0] completed_inst;
     reg [29:0] fetch_next_addr;
-    reg        shit;
     always @(*) begin
         pc_word_addr = pc[31:2];
         fetch_next_addr = pc_word_addr + 1;
@@ -61,7 +60,6 @@ module realigner (
             b_w = !ICACHE_stall && !stall && (step && compressed);
             fetch_word_addr = pc_word_addr;
         end
-        shit = ready && (b_r != buffered);
         // b_w = (pc_w[31:2] == stored_addr_w);
         
     end

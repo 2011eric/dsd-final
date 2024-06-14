@@ -137,7 +137,7 @@ module RISCV_Pipeline (
         .mul_forward_A_flag(mul_forward_A_flag),
         .mul_forward_A_dat(mul_forward_A_dat),
         .mul_forward_B_flag(mul_forward_B_flag),
-        .mul_forward_B_dat(mul_forword_B_dat)
+        .mul_forward_B_dat(mul_forward_B_dat)
 
     );
 
@@ -278,7 +278,6 @@ module RISCV_Pipeline (
         .forward_A_dat(forward_A_dat),
         .forward_B_flag(forward_B_flag),
         .forward_B_dat(forward_B_dat),
-        .mul_forward_A_flag()
 
 
         //PIPELINE OUTPUT TO EX/MEM REGISTER

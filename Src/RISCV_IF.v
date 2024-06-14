@@ -100,7 +100,7 @@ module RISCV_IF(
         .clk(clk),
         .rst_n(rst_n),
         .pc(pc_r),
-        .pc_w(pc_w),
+        // .pc_w(pc_w),
         .stall(stall),
         .step(step),
         //.flush(stall),
