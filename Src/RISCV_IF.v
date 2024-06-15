@@ -104,7 +104,7 @@ module RISCV_IF(
         // .pc_w(pc_w),
         .stall(stall),
         .step(step),
-        //.flush(stall),
+        .flush(flush),
         .ready(inst_ready),
         .compressed(inst_compressed),
         .inst(inst_aligned),

@@ -3,6 +3,7 @@ module realigner (
     input             rst_n,
     input      [31:0] pc,            // target PC
     input             stall,
+    input             flush,
     input             step,
     output reg        ready,
     output reg        compressed,
@@ -16,7 +17,7 @@ module realigner (
     input             ICACHE_stall
 );
 
-    assign ICACHE_ren   = 1;
+    assign ICACHE_ren   = !flush;
     assign ICACHE_wen   = 0;
     assign ICACHE_wdata = 0;
 
