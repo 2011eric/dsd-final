@@ -18,6 +18,7 @@ set src [list \
     Src/decompressor.v \
     Src/dcache_wrapper.v \
     Src/icache_wrapper.v \
+    Src/prefetch_controller.v \
     Src/dum_mul.v \
 ]
 
