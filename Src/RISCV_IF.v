@@ -53,6 +53,7 @@ module RISCV_IF(
     wire [31:0] inst_i;
     reg [31:0]  pc_r, pc_w;
     wire [31:0] pc_step;
+    reg         step;
     //wire        take_branch;
     //wire [31:0] branch_destination;//deprecated
     //wire [31:0] sbtype_imm;
@@ -141,11 +142,13 @@ module RISCV_IF(
     
     always @(*) begin : next_pc
         //TODO: evaluate between case and if
+        step = 0;
         if (make_correction) begin
             pc_w = pc_correction;
         end else if (!( stall || !inst_ready)) begin
             //branch if predicted so, always jump
             pc_w = pc_step;//next_pc_w; 
+            step = 1;
         end else begin
             pc_w = pc_r;
         end
