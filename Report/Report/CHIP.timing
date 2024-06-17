@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : CHIP
 Version: R-2020.09-SP5
-Date   : Mon Jun 17 13:13:15 2024
+Date   : Mon Jun 17 13:48:40 2024
 ****************************************
 
  # A fanout number of 1000 was used for high fanout net computations.
@@ -14,8 +14,9 @@ Date   : Mon Jun 17 13:13:15 2024
 Operating Conditions: slow   Library: slow
 Wire Load Model Mode: top
 
-  Startpoint: rst_n (input port clocked by CLK)
-  Endpoint: i_RISCV/regfile/reg_data_r_reg[17][25]
+  Startpoint: i_RISCV/mul_inst/mult_x_1/CLK_r_REG66_S1
+              (rising edge-triggered flip-flop clocked by CLK)
+  Endpoint: i_RISCV/mul_inst/CLK_r_REG37_S2
             (rising edge-triggered flip-flop clocked by CLK)
   Path Group: CLK
   Path Type: max
@@ -28,29 +29,38 @@ Wire Load Model Mode: top
   --------------------------------------------------------------------------
   clock CLK (rise edge)                                   0.00       0.00
   clock network delay (ideal)                             0.50       0.50
-  input external delay                                    1.25       1.75 f
-  rst_n (in)                                              0.04       1.79 f
-  U15337/Y (INVX12)                                       0.06       1.84 r
-  U18944/Y (INVX20)                                       0.10       1.94 f
-  i_RISCV/regfile/rst_n (register_file)                   0.00       1.94 f
-  i_RISCV/regfile/U184/Y (AND2X6)                         0.16       2.10 f
-  i_RISCV/regfile/U1271/Y (NOR2X8)                        0.12       2.23 r
-  i_RISCV/regfile/U1658/Y (NAND2X4)                       0.09       2.32 f
-  i_RISCV/regfile/U51/Y (BUFX12)                          0.17       2.49 f
-  i_RISCV/regfile/U568/Y (NAND2X1)                        0.12       2.61 r
-  i_RISCV/regfile/U567/Y (OAI21XL)                        0.11       2.72 f
-  i_RISCV/regfile/reg_data_r_reg[17][25]/D (DFFQX2)       0.00       2.72 f
-  data arrival time                                                  2.72
+  i_RISCV/mul_inst/mult_x_1/CLK_r_REG66_S1/CK (EDFFX4)
+                                                          0.00 #     0.50 r
+  i_RISCV/mul_inst/mult_x_1/CLK_r_REG66_S1/Q (EDFFX4)     0.19       0.69 r
+  i_RISCV/mul_inst/U433/Y (NAND2X4)                       0.06       0.75 f
+  i_RISCV/mul_inst/U351/Y (INVX6)                         0.07       0.82 r
+  i_RISCV/mul_inst/U1037/Y (INVX8)                        0.11       0.94 f
+  i_RISCV/mul_inst/U156/Y (OAI22X1)                       0.18       1.12 r
+  i_RISCV/mul_inst/U640/S (ADDFX2)                        0.38       1.49 f
+  i_RISCV/mul_inst/U158/Y (OAI21X2)                       0.14       1.64 r
+  i_RISCV/mul_inst/U934/Y (OAI2BB1X2)                     0.11       1.74 f
+  i_RISCV/mul_inst/U803/CO (ADDFHX4)                      0.20       1.94 f
+  i_RISCV/mul_inst/U204/Y (NOR2X6)                        0.13       2.07 r
+  i_RISCV/mul_inst/U200/Y (NOR2X8)                        0.06       2.13 f
+  i_RISCV/mul_inst/U191/Y (AOI21X4)                       0.09       2.23 r
+  i_RISCV/mul_inst/U241/Y (OAI21X4)                       0.08       2.31 f
+  i_RISCV/mul_inst/U302/Y (NAND2X6)                       0.06       2.37 r
+  i_RISCV/mul_inst/U147/Y (NAND2X8)                       0.05       2.42 f
+  i_RISCV/mul_inst/U847/Y (BUFX20)                        0.09       2.51 f
+  i_RISCV/mul_inst/U1174/Y (AOI21X4)                      0.08       2.59 r
+  i_RISCV/mul_inst/U219/Y (XOR2X4)                        0.09       2.68 f
+  i_RISCV/mul_inst/CLK_r_REG37_S2/D (EDFFXL)              0.00       2.68 f
+  data arrival time                                                  2.68
 
   clock CLK (rise edge)                                   2.50       2.50
   clock network delay (ideal)                             0.50       3.00
   clock uncertainty                                      -0.10       2.90
-  i_RISCV/regfile/reg_data_r_reg[17][25]/CK (DFFQX2)      0.00       2.90 r
-  library setup time                                     -0.18       2.72
-  data required time                                                 2.72
+  i_RISCV/mul_inst/CLK_r_REG37_S2/CK (EDFFXL)             0.00       2.90 r
+  library setup time                                     -0.22       2.68
+  data required time                                                 2.68
   --------------------------------------------------------------------------
-  data required time                                                 2.72
-  data arrival time                                                 -2.72
+  data required time                                                 2.68
+  data arrival time                                                 -2.68
   --------------------------------------------------------------------------
   slack (MET)                                                        0.00
 
