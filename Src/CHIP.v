@@ -36,7 +36,9 @@ module CHIP (
 	icache_read_stalled_cycles,
 	icache_write_stalled_cycles,
     prediction_cnt,
-    prediction_wrong_cnt
+    prediction_wrong_cnt,
+    jal_cnt,
+    jal_wrong_cnt
 `endif
 );
     input clk, rst_n;
@@ -75,6 +77,8 @@ module CHIP (
 	output [31:0] icache_write_stalled_cycles;
     output [31:0] prediction_cnt;
     output [31:0] prediction_wrong_cnt;
+    output [31:0] jal_cnt;
+    output [31:0] jal_wrong_cnt;
 `endif
     //--------------------------
 
@@ -125,7 +129,9 @@ module CHIP (
     `ifdef DEBUG_STAT
         ,
         .prediction_cnt(prediction_cnt),
-        .prediction_wrong_cnt(prediction_wrong_cnt)
+        .prediction_wrong_cnt(prediction_wrong_cnt),
+        .jal_cnt(jal_cnt),
+        .jal_wrong_cnt(jal_wrong_cnt)
     `endif
     );
 

@@ -123,6 +123,8 @@ module Final_tb;
     wire [31:0] icache_write_stalled_cycles;
     wire [31:0] prediction_cnt;
     wire [31:0] prediction_wrong_cnt;
+    wire [31:0] jal_cnt;
+    wire [31:0] jal_wrong_cnt;
 
     // Note the design is connected at testbench, include:
     // 1. CHIP (RISCV + D_cache + I_chache)
@@ -165,7 +167,9 @@ module Final_tb;
         icache_read_stalled_cycles,
         icache_write_stalled_cycles,
         prediction_cnt,
-        prediction_wrong_cnt
+        prediction_wrong_cnt,
+        jal_cnt,
+        jal_wrong_cnt
 `endif
     );
 
@@ -278,6 +282,13 @@ module Final_tb;
             $display("Prediction Wrong: %d\n", prediction_wrong_cnt);
             $display("Prediction Correct Rate: %f%%\n",
                      (1.0 * (prediction_cnt - prediction_wrong_cnt)) / (1.0 * prediction_cnt) * 100);
+            $display("-----------------------------------------------------\n");
+            $display("JAL Prediction Informations: \n");
+            $display("Total prediction: %d\n", jal_cnt);
+            $display("Prediction Correct: %d\n", jal_cnt - jal_wrong_cnt);
+            $display("Prediction Wrong: %d\n", jal_wrong_cnt);
+            $display("Prediction Correct Rate: %f%%\n",
+                     (1.0 * (jal_cnt - jal_wrong_cnt)) / (1.0 * jal_cnt) * 100);
             $display("-----------------------------------------------------\n");
         end
     end

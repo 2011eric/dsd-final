@@ -20,7 +20,9 @@ module RISCV_Pipeline (
     `ifdef DEBUG_STAT
     ,
     output [31:0] prediction_cnt,
-    output [31:0] prediction_wrong_cnt
+    output [31:0] prediction_wrong_cnt,
+    output [31:0] jal_cnt,
+    output [31:0] jal_wrong_cnt
     `endif
 );
 
@@ -350,10 +352,13 @@ module RISCV_Pipeline (
         .clk                        (clk),
         .rst_n                      (rst_n),
         .ID_EX_branch               (ID_EX_branch_ppl || ID_EX_jal_ppl || ID_EX_jalr_ppl),//count the predicted jumps
+        .is_jal                     (ID_EX_jal_ppl),
         .EX_feedback_valid          (EX_feedback_valid),
         .EX_prediction_incorrect    (EX_make_correction),
         .prediction_cnt             (prediction_cnt),
-        .prediction_wrong_cnt       (prediction_wrong_cnt)
+        .prediction_wrong_cnt       (prediction_wrong_cnt),
+        .jal_cnt                    (jal_cnt),
+        .jal_wrong_cnt              (jal_wrong_cnt)
     );
     `endif
 
