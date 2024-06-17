@@ -108,7 +108,7 @@ module EX_STAGE #(
     //forwarded rs1, rs2
     assign forwarded_rs1 = (forward_A_flag) ? forward_A_dat : rs1_dat_in;
     assign forwarded_rs2 = (forward_B_flag) ? forward_B_dat : rs2_dat_in;
-    assign jump_in = jalr_in || jal_in;
+    assign jump_in = jalr_in;
 
     //branch
     assign feedback_valid = (branch_in || jump_in);

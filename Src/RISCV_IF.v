@@ -81,20 +81,26 @@ module RISCV_IF(
     //assign rvc_jalr_jr = (inst_i[15:13] == 3'b100)
     //                    & (inst_i[6:2] == 5'b00000)
     //                    & (inst_i[1:0] == 2'b10);    
-    //assign rvc_jal_j = (inst_i[15:13] == 3'b101 || inst_i[15:13] == 3'b001) && inst_i[1:0] == 2'b01;
+    assign rvc_jal_j = (inst_i[15:13] == 3'b101 || inst_i[15:13] == 3'b001) && inst_i[1:0] == 2'b01;
     
-
+    wire [31:0] uj_imm;
+    assign uj_imm = {
+        {(32 - 21) {inst_i[31]}}, inst_i[31], inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0
+    };
     //assign is_branch = inst_compressed? 
     //                    ((inst_i[15:13] == 3'b110 | (inst_i[15:13] == 3'b111))
     //                    & (inst_i[1:0] == 2'b01)) :
     //                    (inst_i[6: 0] == OPCODE_BRANCH);
-    //assign is_jump   = inst_compressed? 
-    //                    (rvc_jalr_jr || rvc_jal_j) :
-    //                    (inst_i[6: 0] == OPCODE_JAL || inst_i[6: 0] == OPCODE_JALR);
+    assign is_jump   = inst_compressed? 
+                       (rvc_jal_j) :
+                       (inst_i[6: 0] == OPCODE_JAL);
 
+    wire [31:0] rvc_imm;
+    assign rvc_imm    = (inst_i[14]) ? {{24{inst_i[12]}}, inst_i[6:5], inst_i[2], inst_i[11:10], inst_i[4:3], 1'b0}
+                                       : {{21{inst_i[12]}}, inst_i[8], inst_i[10:9], inst_i[6], inst_i[7], inst_i[2], inst_i[11], inst_i[5:3], 1'b0};
     //assign next_pc_w = ((take_branch && is_branch)||is_jump)? btb_dest: pc_step;
-
-
+    wire [31:0] pc_jump;
+    assign pc_jump = pc_r + (inst_compressed? rvc_imm : uj_imm);
     //assign branch_destination = pc_r + sbtype_imm; //doing this in IF is too slow, do in EX
 
     realigner u0 (
@@ -145,7 +151,10 @@ module RISCV_IF(
         step = 0;
         if (make_correction) begin
             pc_w = pc_correction;
-        end else if (!( stall || !inst_ready)) begin
+        end else if (is_jump) begin
+            pc_w = pc_jump;
+        end
+            else if (!( stall || !inst_ready)) begin
             //branch if predicted so, always jump
             pc_w = pc_step;//next_pc_w; 
             step = 1;
