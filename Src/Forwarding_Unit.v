@@ -15,12 +15,7 @@ module Forwarding_Unit(
     output reg         forward_A_flag,
     output reg [31: 0] forward_A_dat,
     output reg         forward_B_flag,
-    output reg [31: 0] forward_B_dat,
-    output reg         mul_forward_A_flag,
-    output reg [31: 0] mul_forward_A_dat,
-    output reg         mul_forward_B_flag,
-    output reg [31: 0] mul_forward_B_dat
-
+    output reg [31: 0] forward_B_dat
 );
 
 wire [1:0] ForwardA, ForwardB;
@@ -47,12 +42,6 @@ always @(*)begin
 
     forward_A_dat = rd_data;
     forward_B_dat = rd_data;
-
-    mul_forward_A_flag = ForwardA_MEM_WB;
-    mul_forward_B_flag = ForwardB_MEM_WB;
-    
-    mul_forward_A_dat = rd_data;
-    mul_forward_B_dat = rd_data;
     if (ForwardA[1]) begin
         if (EX_MEM_jump) begin
             forward_A_dat = EX_MEM_PC_step;
