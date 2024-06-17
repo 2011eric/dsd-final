@@ -150,6 +150,7 @@ module RISCV_IF(
             pc_w = pc_step;//next_pc_w; 
             step = 1;
         end else begin
+            step = 1;
             pc_w = pc_r;
         end
     end
