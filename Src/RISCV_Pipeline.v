@@ -91,7 +91,6 @@ module RISCV_Pipeline (
     wire [31:0] forward_A_dat, forward_B_dat;
     wire forward_A_flag, forward_B_flag;
     wire load_mul_use_hazard;
-
     wire mul_forward_A_flag, mul_forward_B_flag;
     wire [31:0] mul_forward_A_dat, mul_forward_B_dat;
 
@@ -278,6 +277,7 @@ module RISCV_Pipeline (
         .forward_A_dat(forward_A_dat),
         .forward_B_flag(forward_B_flag),
         .forward_B_dat(forward_B_dat),
+
 
 
         //PIPELINE OUTPUT TO EX/MEM REGISTER

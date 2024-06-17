@@ -60,7 +60,6 @@ module realigner (
             b_w = !ICACHE_stall && !stall && (step && compressed);
             fetch_word_addr = pc_word_addr;
         end
-        // b_w = (pc_w[31:2] == stored_addr_w);
         
     end
 

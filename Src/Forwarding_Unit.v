@@ -32,27 +32,31 @@ assign ForwardB_EX_MEM = (EX_MEM_RegWrite && (EX_MEM_RegisterRd != 0) && (EX_MEM
 
 assign ForwardA_MEM_WB = ((MEM_WB_RegWrite && (MEM_WB_RegisterRd != 0) && (MEM_WB_RegisterRd == ID_EX_RegisterRs1)));
 assign ForwardB_MEM_WB = ((MEM_WB_RegWrite && (MEM_WB_RegisterRd != 0) && (MEM_WB_RegisterRd == ID_EX_RegisterRs2)));
-// assign ForwardA =  ? 2'b10 : 
-                //   ((MEM_WB_RegWrite && (MEM_WB_RegisterRd != 0) && (MEM_WB_RegisterRd == ID_EX_RegisterRs1)) ? 2'b01 : 2'b00);
-
-// assign ForwardB = (EX_MEM_RegWrite && (EX_MEM_RegisterRd != 0) && (EX_MEM_RegisterRd == ID_EX_RegisterRs2)) ? 2'b10 : 
-                //    ? 2'b01 : 2'b00);
 
 assign ForwardA = {ForwardA_EX_MEM, ForwardA_MEM_WB};
 assign ForwardB = {ForwardB_EX_MEM, ForwardB_MEM_WB};
+
+/*
+assign ForwardA = (EX_MEM_RegWrite && (EX_MEM_RegisterRd != 0) && (EX_MEM_RegisterRd == ID_EX_RegisterRs1)) ? 2'b10 : 
+                  ((MEM_WB_RegWrite && (MEM_WB_RegisterRd != 0) && (MEM_WB_RegisterRd == ID_EX_RegisterRs1)) ? 2'b01 : 2'b00);
+
+assign ForwardB = (EX_MEM_RegWrite && (EX_MEM_RegisterRd != 0) && (EX_MEM_RegisterRd == ID_EX_RegisterRs2)) ? 2'b10 : 
+                  ((MEM_WB_RegWrite && (MEM_WB_RegisterRd != 0) && (MEM_WB_RegisterRd == ID_EX_RegisterRs2)) ? 2'b01 : 2'b00);
+*/
+
+
 always @(*)begin
     //default
     forward_A_flag = |ForwardA;
     forward_B_flag = |ForwardB;
-
     forward_A_dat = rd_data;
     forward_B_dat = rd_data;
-
+    
     mul_forward_A_flag = ForwardA_MEM_WB;
     mul_forward_B_flag = ForwardB_MEM_WB;
-    
     mul_forward_A_dat = rd_data;
     mul_forward_B_dat = rd_data;
+
     if (ForwardA[1]) begin
         if (EX_MEM_jump) begin
             forward_A_dat = EX_MEM_PC_step;
@@ -70,8 +74,9 @@ always @(*)begin
             forward_B_dat = EX_MEM_alu_result;
         end
     end else if (ForwardB[0]) begin
-        forward_B_dat = rd_data;
+            forward_B_dat = rd_data;
     end
+
 end
 
 
