@@ -1,0 +1,58 @@
+ 
+****************************************
+Report : timing
+        -path full
+        -delay max
+        -max_paths 1
+Design : CHIP
+Version: R-2020.09-SP5
+Date   : Mon Jun 17 13:13:15 2024
+****************************************
+
+ # A fanout number of 1000 was used for high fanout net computations.
+
+Operating Conditions: slow   Library: slow
+Wire Load Model Mode: top
+
+  Startpoint: rst_n (input port clocked by CLK)
+  Endpoint: i_RISCV/regfile/reg_data_r_reg[17][25]
+            (rising edge-triggered flip-flop clocked by CLK)
+  Path Group: CLK
+  Path Type: max
+
+  Des/Clust/Port     Wire Load Model       Library
+  ------------------------------------------------
+  CHIP               tsmc13_wl10           slow
+
+  Point                                                   Incr       Path
+  --------------------------------------------------------------------------
+  clock CLK (rise edge)                                   0.00       0.00
+  clock network delay (ideal)                             0.50       0.50
+  input external delay                                    1.25       1.75 f
+  rst_n (in)                                              0.04       1.79 f
+  U15337/Y (INVX12)                                       0.06       1.84 r
+  U18944/Y (INVX20)                                       0.10       1.94 f
+  i_RISCV/regfile/rst_n (register_file)                   0.00       1.94 f
+  i_RISCV/regfile/U184/Y (AND2X6)                         0.16       2.10 f
+  i_RISCV/regfile/U1271/Y (NOR2X8)                        0.12       2.23 r
+  i_RISCV/regfile/U1658/Y (NAND2X4)                       0.09       2.32 f
+  i_RISCV/regfile/U51/Y (BUFX12)                          0.17       2.49 f
+  i_RISCV/regfile/U568/Y (NAND2X1)                        0.12       2.61 r
+  i_RISCV/regfile/U567/Y (OAI21XL)                        0.11       2.72 f
+  i_RISCV/regfile/reg_data_r_reg[17][25]/D (DFFQX2)       0.00       2.72 f
+  data arrival time                                                  2.72
+
+  clock CLK (rise edge)                                   2.50       2.50
+  clock network delay (ideal)                             0.50       3.00
+  clock uncertainty                                      -0.10       2.90
+  i_RISCV/regfile/reg_data_r_reg[17][25]/CK (DFFQX2)      0.00       2.90 r
+  library setup time                                     -0.18       2.72
+  data required time                                                 2.72
+  --------------------------------------------------------------------------
+  data required time                                                 2.72
+  data arrival time                                                 -2.72
+  --------------------------------------------------------------------------
+  slack (MET)                                                        0.00
+
+
+1

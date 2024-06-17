@@ -1,0 +1,132 @@
+make[1]: Entering directory `/home/b10901193/DSD_Final/Src'
+vcs Final_tb.v slow_memory.v -f src.f -full64 -R -debug_access+all +v2k +define+noHazard +define+DEBUG_STAT +define+USE_BTB +define+CYCLE=2.5 #+vcs+fsdbon
+*** Using c compiler gcc instead of cc ...
+                         Chronologic VCS (TM)
+       Version R-2020.12-SP2_Full64 -- Mon Jun 17 13:03:31 2024
+
+                    Copyright (c) 1991 - 2021 Synopsys, Inc.
+   This software and the associated documentation are proprietary to Synopsys,
+ Inc. This software may only be used in accordance with the terms and conditions
+ of a written license agreement with Synopsys, Inc. All other use, reproduction,
+            or distribution of this software is strictly prohibited.
+
+Parsing design file 'Final_tb.v'
+Parsing included file '../Baseline/TestBed_noHazard.v'.
+Back to file 'Final_tb.v'.
+Parsing design file 'slow_memory.v'
+Parsing design file 'CHIP.v'
+Parsing design file 'icache_dm.v'
+Parsing design file 'dcache.v'
+Parsing design file 'alu.v'
+Parsing design file 'dum_mul.v'
+Parsing design file 'decoder.v'
+Parsing included file 'riscv_define.vh'.
+Back to file 'decoder.v'.
+Parsing design file 'decompressor.v'
+Parsing included file 'riscv_define.vh'.
+Back to file 'decompressor.v'.
+Parsing design file 'prefetch_controller.v'
+Parsing design file 'dcache_wrapper.v'
+Parsing design file 'icache_wrapper.v'
+Parsing design file 'cache_pmu.v'
+Parsing design file 'pred_pmu.v'
+Parsing design file 'realigner.v'
+Parsing design file 'register_file.v'
+Parsing design file 'HAZARD_DETECTION.v'
+Parsing design file 'Forwarding_Unit.v'
+Parsing design file 'RISCV_Pipeline.v'
+Parsing design file 'RISCV_IF.v'
+Parsing design file 'RISCV_ID.v'
+Parsing design file 'RISCV_EX.v'
+Parsing design file 'RISCV_MEM.v'
+Parsing design file 'RISCV_WB.v'
+Top Level Modules:
+       Final_tb
+TimeScale is 1 ns / 10 ps
+
+Warning-[TFIPC] Too few instance port connections
+icache_dm.v, 54
+icache_dm, "iset iset_0( .clk (clk),  .rst (proc_reset),  .write_i (wen),  .update_i (update),  .valid_i (valid_next),  .wdata_i (wdata),  .addr_i (((state_r == S_IDLE) ? proc_addr : addr_r)),  .hit_o (hit),  .tag_o (tag),  .rdata_o (rdata));"
+  The above instance has fewer port connections than the module definition.
+  Please use '+lint=TFIPC-L' to print out detailed information of unconnected 
+  ports.
+
+
+Warning-[PCWM-W] Port connection width mismatch
+Final_tb.v, 192
+"TestBed testbed( .clk (clk),  .rst (rst_n),  .addr (DCACHE_addr),  .data (DCACHE_wdata),  .wen (DCACHE_wen),  .PC (PC),  .error_num (error_num),  .duration (duration),  .finish (finish));"
+  The following 9-bit expression is connected to 8-bit port "error_num" of 
+  module "TestBed", instance "testbed".
+  Expression: error_num
+  Instantiated module defined at: "../Baseline/TestBed_noHazard.v", 35
+  Use +lint=PCWM for more details.
+
+Starting vcs inline pass...
+
+9 modules and 0 UDP read.
+recompiling module TestBed
+recompiling module Final_tb
+recompiling module RISCV_Pipeline
+3 of 9 modules done
+	However, due to incremental compilation, only 3 modules need to be compiled. 
+make[2]: Entering directory `/home/b10901193/DSD_Final/Src/csrc'
+make[2]: Leaving directory `/home/b10901193/DSD_Final/Src/csrc'
+make[2]: Entering directory `/home/b10901193/DSD_Final/Src/csrc'
+rm -f _cuarc*.so _csrc*.so pre_vcsobj_*.so share_vcsobj_*.so
+ld -shared  -Bsymbolic   -o .//../simv.daidir//_cuarc0.so objs/amcQw_d.o 
+rm -f _cuarc0.so
+if [ -x ../simv ]; then chmod a-x ../simv; fi
+g++  -o ../simv      -rdynamic  -Wl,-rpath='$ORIGIN'/simv.daidir -Wl,-rpath=./simv.daidir -Wl,-rpath=/usr/cad/synopsys/vcs/cur/linux64/lib -L/usr/cad/synopsys/vcs/cur/linux64/lib  -Wl,-rpath-link=./  /usr/lib64/libnuma.so.1     _32600_archive_1.so _prev_archive_1.so _cuarc0.so  SIM_l.o      rmapats_mop.o rmapats.o rmar.o rmar_nd.o  rmar_llvm_0_1.o rmar_llvm_0_0.o           -lvirsim -lerrorinf -lsnpsmalloc -lvfs    -lvcsnew -lsimprofile -luclinative /usr/cad/synopsys/vcs/cur/linux64/lib/vcs_tls.o   -Wl,-whole-archive  -lvcsucli    -Wl,-no-whole-archive        _vcs_pli_stub_.o   /usr/cad/synopsys/vcs/cur/linux64/lib/vcs_save_restore_new.o /usr/cad/synopsys/verdi/cur/share/PLI/VCS/LINUX64/pli.a -ldl  -lc -lm -lpthread -ldl 
+../simv up to date
+make[2]: Leaving directory `/home/b10901193/DSD_Final/Src/csrc'
+
+Information: Interrupting current command. (INT-2)
+Information: script '/usr/cad/synopsys/vcs/cur/etc/ucli/synopsys.tcl'
+	stopped at line 30 due to error. (CMD-081)
+Extended error info:
+
+    while executing
+"source /usr/cad/synopsys/vcs/cur/etc/ucli/run.tcl"
+    ("package ifneeded run 1.0" script)
+    invoked from within
+"package require run"
+    (file "/usr/cad/synopsys/vcs/cur/etc/ucli/synopsys.tcl" line 30)
+ -- End Extended Error Info
+Information: script '/usr/cad/synopsys/vcs/cur/etc/ucli/ucli.tcl'
+	stopped at line 66 due to error. (CMD-081)
+Extended error info:
+
+    while executing
+"source /usr/cad/synopsys/vcs/cur/etc/ucli/run.tcl"
+    ("package ifneeded run 1.0" script)
+    invoked from within
+"package require run"
+    (file "/usr/cad/synopsys/vcs/cur/etc/ucli/synopsys.tcl" line 30)
+    invoked from within
+"source /usr/cad/synopsys/vcs/cur/etc/ucli/synopsys.tcl"
+    ("package ifneeded synopsys 1.0" script)
+    invoked from within
+"package require synopsys"
+    (file "/usr/cad/synopsys/vcs/cur/etc/ucli/ucli.tcl" line 66)
+ -- End Extended Error Info
+Warning: Cannot load package ucli. Interactive simulation is unavailable
+
+    while executing
+"source /usr/cad/synopsys/vcs/cur/etc/ucli/run.tcl"
+    ("package ifneeded run 1.0" script)
+    invoked from within
+"package require run"
+    (file "/usr/cad/synopsys/vcs/cur/etc/ucli/synopsys.tcl" line 30)
+    invoked from within
+"source /usr/cad/synopsys/vcs/cur/etc/ucli/synopsys.tcl"
+    ("package ifneeded synopsys 1.0" script)
+    invoked from within
+"package require synopsys"
+    (file "/usr/cad/synopsys/vcs/cur/etc/ucli/ucli.tcl" line 66)
+    invoked from within
+"source /usr/cad/synopsys/vcs/cur/etc/ucli/ucli.tcl"
+    ("package ifneeded ucli 1.0" script)
+    invoked from within
+"package require ucli"
+Warning: The UCLI could not be loaded. Interactive simulation is unavailable.
+CPU time: 1.098 seconds to compile + .603 seconds to elab + .379 seconds to link + .259 seconds in simulation
