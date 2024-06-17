@@ -49,7 +49,8 @@ set_optimize_registers true -design dum_mul
 
 set_critical_range  0.3  [current_design]
 
-compile_ultra
+compile_ultra -retime -timing
+optimize_registers -only_attibuted_designs
 optimize_netlist -area
 write_sdf -version 2.1  -context verilog -load_delay cell "Syn/${DESIGN}_syn.sdf"
 write -format verilog -hierarchy -output "Syn/${DESIGN}_syn.v"

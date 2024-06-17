@@ -6,7 +6,7 @@ Report : timing
         -max_paths 1
 Design : CHIP
 Version: R-2020.09-SP5
-Date   : Mon Jun 17 13:48:40 2024
+Date   : Mon Jun 17 17:30:41 2024
 ****************************************
 
  # A fanout number of 1000 was used for high fanout net computations.
@@ -14,9 +14,9 @@ Date   : Mon Jun 17 13:48:40 2024
 Operating Conditions: slow   Library: slow
 Wire Load Model Mode: top
 
-  Startpoint: i_RISCV/mul_inst/mult_x_1/CLK_r_REG66_S1
+  Startpoint: i_RISCV/mul_inst/CLK_r_REG165_S1
               (rising edge-triggered flip-flop clocked by CLK)
-  Endpoint: i_RISCV/mul_inst/CLK_r_REG37_S2
+  Endpoint: i_RISCV/mul_inst/CLK_r_REG137_S2
             (rising edge-triggered flip-flop clocked by CLK)
   Path Group: CLK
   Path Type: max
@@ -29,33 +29,32 @@ Wire Load Model Mode: top
   --------------------------------------------------------------------------
   clock CLK (rise edge)                                   0.00       0.00
   clock network delay (ideal)                             0.50       0.50
-  i_RISCV/mul_inst/mult_x_1/CLK_r_REG66_S1/CK (EDFFX4)
-                                                          0.00 #     0.50 r
-  i_RISCV/mul_inst/mult_x_1/CLK_r_REG66_S1/Q (EDFFX4)     0.19       0.69 r
-  i_RISCV/mul_inst/U433/Y (NAND2X4)                       0.06       0.75 f
-  i_RISCV/mul_inst/U351/Y (INVX6)                         0.07       0.82 r
-  i_RISCV/mul_inst/U1037/Y (INVX8)                        0.11       0.94 f
-  i_RISCV/mul_inst/U156/Y (OAI22X1)                       0.18       1.12 r
-  i_RISCV/mul_inst/U640/S (ADDFX2)                        0.38       1.49 f
-  i_RISCV/mul_inst/U158/Y (OAI21X2)                       0.14       1.64 r
-  i_RISCV/mul_inst/U934/Y (OAI2BB1X2)                     0.11       1.74 f
-  i_RISCV/mul_inst/U803/CO (ADDFHX4)                      0.20       1.94 f
-  i_RISCV/mul_inst/U204/Y (NOR2X6)                        0.13       2.07 r
-  i_RISCV/mul_inst/U200/Y (NOR2X8)                        0.06       2.13 f
-  i_RISCV/mul_inst/U191/Y (AOI21X4)                       0.09       2.23 r
-  i_RISCV/mul_inst/U241/Y (OAI21X4)                       0.08       2.31 f
-  i_RISCV/mul_inst/U302/Y (NAND2X6)                       0.06       2.37 r
-  i_RISCV/mul_inst/U147/Y (NAND2X8)                       0.05       2.42 f
-  i_RISCV/mul_inst/U847/Y (BUFX20)                        0.09       2.51 f
-  i_RISCV/mul_inst/U1174/Y (AOI21X4)                      0.08       2.59 r
-  i_RISCV/mul_inst/U219/Y (XOR2X4)                        0.09       2.68 f
-  i_RISCV/mul_inst/CLK_r_REG37_S2/D (EDFFXL)              0.00       2.68 f
+  i_RISCV/mul_inst/CLK_r_REG165_S1/CK (EDFFX4)            0.00 #     0.50 r
+  i_RISCV/mul_inst/CLK_r_REG165_S1/Q (EDFFX4)             0.18       0.68 r
+  i_RISCV/mul_inst/U244/Y (BUFX3)                         0.10       0.79 r
+  i_RISCV/mul_inst/U1346/Y (BUFX20)                       0.10       0.89 r
+  i_RISCV/mul_inst/U1639/Y (XNOR2X2)                      0.15       1.04 f
+  i_RISCV/mul_inst/U1638/Y (OAI22X4)                      0.17       1.21 r
+  i_RISCV/mul_inst/U982/S (ADDFHX4)                       0.25       1.46 f
+  i_RISCV/mul_inst/U1329/Y (XOR2X4)                       0.08       1.54 r
+  i_RISCV/mul_inst/U379/Y (XOR2X4)                        0.12       1.66 f
+  i_RISCV/mul_inst/U18/Y (CLKBUFX8)                       0.10       1.76 f
+  i_RISCV/mul_inst/U1253/Y (OAI21X2)                      0.14       1.90 r
+  i_RISCV/mul_inst/U1243/Y (OAI2BB1X4)                    0.07       1.97 f
+  i_RISCV/mul_inst/U381/Y (CLKAND2X8)                     0.11       2.08 f
+  i_RISCV/mul_inst/U1621/Y (AOI21X4)                      0.14       2.22 r
+  i_RISCV/mul_inst/U566/Y (NOR2X8)                        0.07       2.30 f
+  i_RISCV/mul_inst/U559/Y (NOR2X4)                        0.08       2.38 r
+  i_RISCV/mul_inst/U949/Y (NAND2X6)                       0.09       2.47 f
+  i_RISCV/mul_inst/U1691/Y (AOI21X4)                      0.10       2.57 r
+  i_RISCV/mul_inst/U1688/Y (XNOR2X4)                      0.11       2.68 f
+  i_RISCV/mul_inst/CLK_r_REG137_S2/D (EDFFXL)             0.00       2.68 f
   data arrival time                                                  2.68
 
   clock CLK (rise edge)                                   2.50       2.50
   clock network delay (ideal)                             0.50       3.00
   clock uncertainty                                      -0.10       2.90
-  i_RISCV/mul_inst/CLK_r_REG37_S2/CK (EDFFXL)             0.00       2.90 r
+  i_RISCV/mul_inst/CLK_r_REG137_S2/CK (EDFFXL)            0.00       2.90 r
   library setup time                                     -0.22       2.68
   data required time                                                 2.68
   --------------------------------------------------------------------------

@@ -1,11 +1,11 @@
 
-noHazard:    [1;32m741250 ps[0m
-hasHazard:    [1;32m5901250 ps[0m
-BrPred:    [1;32m1103750 ps[0m
-compression:    [1;32m1513750 ps[0m
-compression_uncompressed:    [1;32m2378750 ps[0m
-Mul:    [1;32m1038750 ps[0m
-QSort:    [1;32m342408750 ps[0m
-QSort_uncompressed:    [1;32m441623750 ps[0m
-Conv:    [1;32m63611250 ps[0m
-Conv_uncompressed:    [1;32m85816250 ps[0m
+noHazard:    [1;32m1435000 ps[0m
+hasHazard:    [1;32m20455000 ps[0m
+BrPred:    [1;32m3895000 ps[0m
+compression:    [1;32m4795000 ps[0m
+compression_uncompressed:    [1;32m6005000 ps[0m
+Mul:    [1;32m3395000 ps[0m
+QSort:    [1;32m944665000 ps[0m
+QSort_uncompressed:    [1;32m1079095000 ps[0m
+Conv:    [1;32m139495000 ps[0m
+Conv_uncompressed:    [1;32m168115000 ps[0m
